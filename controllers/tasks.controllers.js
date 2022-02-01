@@ -24,13 +24,33 @@ const updateTask = asyncWrapper(async (req, res, next) => {
 
   res.status(200).json({ task });
 });
+const updateTask = asyncWrapper(async (req, res, next) => {
+  const { id } = req.params;
+
+  const task = await Task.findOneAndUpdate({ _id: id }, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
+  if (!task) {
+    return next(createCustomError(`No task found`, 404));
+  }
+
+  res.status(200).json({ task });
+});
 const getTask = asyncWrapper(async (req, res) => {
   const task = await Task.findById(req.params.id);
   res.status(200).json({ task });
 });
 
+const createTask = async (req,res)=>{
+  const task = await Task.create(req.body)
+  res.status(201).json(task)
+}
+
 module.exports = {
   updateTask,
   getAllTasks,
   getTask,
+  createTask
 };
