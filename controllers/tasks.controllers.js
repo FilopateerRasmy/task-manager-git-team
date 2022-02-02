@@ -24,8 +24,13 @@ const updateTask = asyncWrapper(async (req, res, next) => {
 
   res.status(200).json({ task });
 });
+const getTask = asyncWrapper(async (req, res) => {
+  const task = await Task.findById(req.params.id);
+  res.status(200).json({ task });
+});
 
 module.exports = {
   updateTask,
   getAllTasks,
+  getTask,
 };
